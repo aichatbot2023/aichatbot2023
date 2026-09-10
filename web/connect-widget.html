@@ -1,0 +1,105 @@
+<!--
+  Isečak za AiChatBot dashboard: Podešavanja → Integracije → Claude konektor.
+  Zameni vrednosti u data-* atributima podacima sa servera (token generiši u backendu).
+  Nema zavisnosti - čist HTML/CSS/JS.
+-->
+<div class="acb-claude" data-mcp-url="https://mcp.aichatbot.rs/u/TOKEN_IDE_OVDE/mcp">
+  <div class="acb-claude__head">
+    <h3>Claude konektor</h3>
+    <span class="acb-claude__badge" data-status="active">Aktivan</span>
+  </div>
+
+  <p class="acb-claude__lead">
+    Poveži svoj nalog sa Claude-om i pitaj ga o razgovorima, leadovima i statistici
+    običnim jezikom. Podešavanje traje 2 minuta.
+  </p>
+
+  <label class="acb-claude__label" for="acb-mcp-url">Tvoj link za povezivanje</label>
+  <div class="acb-claude__row">
+    <input id="acb-mcp-url" class="acb-claude__input" type="password" readonly value="" />
+    <button class="acb-claude__btn acb-claude__btn--ghost" type="button" data-action="toggle">Prikaži</button>
+    <button class="acb-claude__btn" type="button" data-action="copy">Kopiraj</button>
+  </div>
+
+  <p class="acb-claude__warn">
+    Ovaj link je kao lozinka — ko ga ima, vidi tvoje podatke. Ne deli ga.
+  </p>
+
+  <ol class="acb-claude__steps">
+    <li>Otvori <a href="https://claude.ai/settings/connectors" target="_blank" rel="noopener">claude.ai → Settings → Connectors</a></li>
+    <li>Klikni <strong>+ Add custom connector</strong></li>
+    <li>Nalepi link odozgo i klikni <strong>Add</strong></li>
+    <li>U razgovoru: <strong>+</strong> → <strong>Connectors</strong> → uključi <strong>aichatbot-rs</strong></li>
+  </ol>
+
+  <div class="acb-claude__foot">
+    <a class="acb-claude__link" href="/docs/claude-konektor" target="_blank" rel="noopener">Detaljno uputstvo</a>
+    <button class="acb-claude__btn acb-claude__btn--danger" type="button" data-action="revoke">Opozovi pristup</button>
+  </div>
+</div>
+
+<style>
+.acb-claude { max-width: 640px; padding: 20px; border: 1px solid #e3e3e0; border-radius: 12px;
+  font: 14px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; color: #1f1f1d; background: #fff; }
+.acb-claude__head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.acb-claude__head h3 { margin: 0; font-size: 16px; }
+.acb-claude__badge { font-size: 12px; padding: 2px 8px; border-radius: 999px; background: #e7f5ec; color: #1d6b3c; }
+.acb-claude__badge[data-status="inactive"] { background: #f3f3f1; color: #6b6b66; }
+.acb-claude__lead { margin: 0 0 16px; color: #55554f; }
+.acb-claude__label { display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; }
+.acb-claude__row { display: flex; gap: 8px; flex-wrap: wrap; }
+.acb-claude__input { flex: 1 1 260px; min-width: 0; padding: 9px 11px; border: 1px solid #d8d8d4;
+  border-radius: 8px; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; background: #fafaf8; }
+.acb-claude__btn { padding: 9px 14px; border: 0; border-radius: 8px; background: #c8613c; color: #fff;
+  font-size: 13px; font-weight: 600; cursor: pointer; }
+.acb-claude__btn:hover { background: #b05433; }
+.acb-claude__btn--ghost { background: #f1f1ee; color: #3a3a36; }
+.acb-claude__btn--ghost:hover { background: #e6e6e2; }
+.acb-claude__btn--danger { background: transparent; color: #b3261e; border: 1px solid #e6c9c7; }
+.acb-claude__btn--danger:hover { background: #fdf1f0; }
+.acb-claude__warn { margin: 10px 0 18px; font-size: 12.5px; color: #8a5a12; background: #fdf6e7;
+  padding: 8px 11px; border-radius: 8px; }
+.acb-claude__steps { margin: 0 0 18px; padding-left: 20px; color: #3a3a36; }
+.acb-claude__steps li { margin-bottom: 5px; }
+.acb-claude__foot { display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  flex-wrap: wrap; border-top: 1px solid #eeeeea; padding-top: 14px; }
+.acb-claude__link { color: #c8613c; text-decoration: none; font-weight: 600; }
+.acb-claude__link:hover { text-decoration: underline; }
+</style>
+
+<script>
+(function () {
+  var root = document.querySelector('.acb-claude');
+  if (!root) return;
+
+  var url = root.dataset.mcpUrl || '';
+  var input = root.querySelector('#acb-mcp-url');
+  input.value = url;
+
+  root.addEventListener('click', function (e) {
+    var action = e.target.closest('[data-action]');
+    if (!action) return;
+
+    if (action.dataset.action === 'toggle') {
+      var hidden = input.type === 'password';
+      input.type = hidden ? 'text' : 'password';
+      action.textContent = hidden ? 'Sakrij' : 'Prikaži';
+    }
+
+    if (action.dataset.action === 'copy') {
+      navigator.clipboard.writeText(url).then(function () {
+        var old = action.textContent;
+        action.textContent = 'Kopirano ✓';
+        setTimeout(function () { action.textContent = old; }, 1800);
+      });
+    }
+
+    if (action.dataset.action === 'revoke') {
+      if (!confirm('Opozvati pristup? Postojeći link odmah prestaje da radi i moraćeš da dodaš novi u Claude-u.')) return;
+      // TODO: zameni svojim endpointom
+      fetch('/api/settings/claude-connector/revoke', { method: 'POST', headers: { 'x-csrf-token': window.CSRF_TOKEN || '' } })
+        .then(function () { location.reload(); });
+    }
+  });
+})();
+</script>
