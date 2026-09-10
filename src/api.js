@@ -1,6 +1,7 @@
 import { config } from './config.js';
 import { log } from './log.js';
 import { demo } from './demo.js';
+import { edgeNameFor } from './platform-functions.js';
 
 export class ApiError extends Error {
   constructor(message, status) {
@@ -52,7 +53,70 @@ async function call(ctx, method, path, { query, body } = {}) {
   return data;
 }
 
+/**
+ * Drugi kanal: Supabase edge funkcije platforme.
+ * Postojeci alati (demo botovi, leadovi, agenti, newsletter) idu ovuda.
+ */
+async function edge(ctx, tool, payload = {}, { functionName } = {}) {
+  const name = functionName || edgeNameFor(tool);
+  if (config.demoMode) return demo('POST', `/functions/v1/${name}`, { body: payload, ctx });
+
+  if (!config.supabaseUrl) throw new ApiError('SUPABASE_URL nije podesen na serveru.', 500);
+
+  const res = await fetch(`${config.supabaseUrl}/functions/v1/${name}`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      apikey: config.supabaseServiceKey,
+      authorization: `Bearer ${config.supabaseServiceKey}`,
+      // Ko poziva - edge funkcija moze da odbije poziv van svog naloga.
+      'x-tenant-id': ctx.tenantId,
+      'x-mcp-role': ctx.role,
+      ...(ctx.userId ? { 'x-user-id': ctx.userId } : {}),
+    },
+    body: JSON.stringify(payload),
+    signal: AbortSignal.timeout(config.apiTimeoutMs),
+  });
+
+  const text = await res.text();
+  let data = null;
+  try {
+    data = text ? JSON.parse(text) : null;
+  } catch {
+    data = { raw: text };
+  }
+
+  if (!res.ok) {
+    log.warn('Edge funkcija vratila gresku', { fn: name, status: res.status, tenant: ctx.tenantId });
+    throw new ApiError(`${name}: ${data?.message || data?.error || `HTTP ${res.status}`}`, res.status);
+  }
+  return data;
+}
+
 export const api = {
+  /* ---- edge funkcije platforme ---- */
+  edge,
+
+  chatWithBot: (ctx, p) => edge(ctx, 'chat_with_bot', p),
+  createChatbotFromWebsite: (ctx, p) => edge(ctx, 'create_chatbot_from_website', p),
+  deleteChatbot: (ctx, p) => edge(ctx, 'delete_chatbot', p),
+  getDemoLink: (ctx, p) => edge(ctx, 'get_demo_link', p),
+  sendDemoEmail: (ctx, p) => edge(ctx, 'send_demo_email', p),
+  findLeads: (ctx, p) => edge(ctx, 'find_leads', p),
+  enrichLeads: (ctx, p) => edge(ctx, 'enrich_leads', p),
+  verifyEmails: (ctx, p) => edge(ctx, 'verify_emails', p),
+  researchCompany: (ctx, p) => edge(ctx, 'research_company', p),
+  listContacts: (ctx, p) => edge(ctx, 'list_contacts', p),
+  sendNewsletter: (ctx, p) => edge(ctx, 'send_newsletter', p),
+  runAgentTask: (ctx, p) => edge(ctx, 'run_agent_task', p),
+  getAgentRun: (ctx, p) => edge(ctx, 'get_agent_run', p),
+  aiTimCommand: (ctx, p) => edge(ctx, 'ai_tim_command', p),
+  platformStats: (ctx, p) => edge(ctx, 'platform_stats', p),
+  readTable: (ctx, p) => edge(ctx, 'read_table', p),
+  invokeFunction: (ctx, { function_name, payload }) =>
+    edge(ctx, 'invoke', payload || {}, { functionName: function_name }),
+
+  /* ---- REST endpointi za klijentske podatke ---- */
   listChatbots: (ctx) => call(ctx, 'GET', '/api/v1/chatbots'),
 
   getStats: (ctx, { period, chatbot_id }) =>

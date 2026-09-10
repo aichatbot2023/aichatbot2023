@@ -175,3 +175,72 @@ node test/smoke.mjs
 - Rate limit je po tokenu (`MCP_RATE_LIMIT`, difolt 120/min).
 - Write alati su dvostruko zaključani: env prekidač + scope u tokenu.
   Uz to Claude traži potvrdu korisnika pre svakog poziva.
+
+---
+
+## 7. Spajanje sa postojećim MCP serverom platforme
+
+Postojeći konektor `AiChatBot_rs` (20 alata: demo botovi, leadovi, agenti,
+newsletter, `read_table`, `invoke_platform_function`) i klijentski konektor
+sada su **jedan server**. Razlikuju se samo po ulozi upisanoj u token.
+
+### Kako je urađeno
+
+Alati platforme se i dalje pozivaju kao **Supabase edge funkcije**, isto kao ranije.
+Mapiranje alat → ime funkcije stoji na jednom mestu, u `src/platform-functions.js`:
+
+```js
+const DEFAULT_EDGE_MAP = {
+  chat_with_bot: 'chat-with-bot',
+  find_leads: 'find-leads',
+  // ...
+};
+```
+
+> **Ovo morate proveriti.** Imena edge funkcija su rekonstruisana iz opisa alata
+> postojećeg konektora, ne iz njegovog izvornog koda — do njega u ovoj sesiji
+> nisam imao pristup. Ako se kod vas zovu drugačije, ispravite mapu ili
+> je nadjačajte bez menjanja koda:
+>
+> ```
+> EDGE_MAP_JSON='{"find_leads":"lead-finder","chat_with_bot":"bot-chat"}'
+> ```
+
+Svaki poziv edge funkciji nosi i:
+
+```
+x-tenant-id: <iz tokena>
+x-mcp-role:  <client | client_write | sales | owner>
+```
+
+pa edge funkcija može sama da odbije poziv koji joj ne odgovara — druga brava,
+nezavisna od MCP servera.
+
+### Šta treba doraditi na backendu
+
+Tri postojeća alata rade nad celom platformom i **nemaju pojam naloga**:
+
+| Alat | Stanje |
+|---|---|
+| `platform_stats` | Brojke cele platforme. Za nalog klijenta služi zaseban `get_stats`. |
+| `read_table` | SELECT bez filtera po nalogu. |
+| `list_contacts` | Newsletter baza cele platforme. |
+
+Zato su svi označeni `crossTenant: true` i zaključani na ulogu `owner`.
+Ako ih ikada budete davali klijentima, prvo dodajte filter po `x-tenant-id`
+u edge funkciju, pa tek onda skinite `crossTenant` u `src/tools/platform.js`.
+Dok to ne uradite, klijent ih ne može dobiti ni greškom.
+
+### Migracija postojećih linkova
+
+Stari tokeni (`scopes: ["read"]` ili `["read","write"]`, bez uloge) i dalje rade —
+prevode se u `client` odnosno `client_write`. Vidi `normalizeGrant()` u `src/scopes.js`.
+Ne morate ništa da regenerišete.
+
+### Gašenje starog servera
+
+1. Podignite ovaj server i generišite sebi `owner` token
+2. Dodajte ga u Claude kao novi konektor i proverite da svih 26 alata radi
+3. Tek onda uklonite stari konektor iz Claude podešavanja
+
+Dok oba rade paralelno ništa se ne kvari — koriste iste edge funkcije.

@@ -39,7 +39,38 @@ const CONVERSATIONS = [
   },
 ];
 
+const EDGE_DEMO = {
+  'chat-with-bot': (b) => ({ reply: `(demo) Bot ${b.bot_id} odgovara na: "${b.message}"`, session_id: b.session_id || 'sess_demo' }),
+  'create-chatbot-from-website': (b) => ({ bot_id: 'bot_demo_new', name: b.name || 'Demo bot', demo_url: 'https://demo.aichatbot.rs/bot_demo_new' }),
+  'delete-chatbot': (b) => ({ ok: true, deleted: b.bot_id }),
+  'get-demo-link': (b) => ({ demo_url: `https://demo.aichatbot.rs/${b.bot_id}`, embed: `<script src="https://cdn.aichatbot.rs/w.js" data-bot="${b.bot_id}"></script>` }),
+  'send-demo-email': (b) => ({ ok: true, sent_to: b.to }),
+  'find-leads': (b) => ({
+    leads: [
+      { company_name: `Demo ${b.industry} 1`, city: b.location, website: 'https://primer1.rs', email: 'info@primer1.rs', phone: '+38111222333', score: 82 },
+      { company_name: `Demo ${b.industry} 2`, city: b.location, website: 'https://primer2.rs', email: null, phone: '+38111444555', score: 54 },
+    ].slice(0, b.limit || 20),
+  }),
+  'enrich-leads': (b) => ({ leads: (b.leads || []).map((l) => ({ ...l, email: `info@${(l.website || '').replace(/^https?:\/\//, '')}`, score: 71 })) }),
+  'verify-emails': (b) => ({ results: (b.emails || []).map((e) => ({ email: e, valid: e.includes('@'), mx: true, disposable: false })) }),
+  'research-company': (b) => ({ answer: `(demo) Na pitanje "${b.question}" sajt ${b.website} ne daje jasan odgovor.`, source: b.website }),
+  'list-contacts': () => ({ contacts: [{ email: 'pera@primer.rs', name: 'Pera Peric', tags: ['newsletter'] }] }),
+  'send-newsletter': (b) => ({ ok: true, campaign: b.name, queued: 128 }),
+  'run-agent-task': (b) => ({ run_id: 'run_demo_1', status: 'queued', task: b.task }),
+  'get-agent-run': (b) => ({ run_id: b.run_id, status: 'completed', result: '(demo) Zadatak zavrsen.' }),
+  'ai-tim-command': (b) => ({ ok: true, action: b.action, agents: 7 }),
+  'platform-stats': () => ({ chatbots: 214, conversations: 18734, contacts: 3120, agents: 12 }),
+  'read-table': (b) => ({ table: b.table, rows: [{ id: 1, note: '(demo red)' }], limit: b.limit || 50 }),
+};
+
 export function demo(method, path, { query = {}, body = {} } = {}) {
+  const edge = path.match(/^\/functions\/v1\/(.+)$/);
+  if (edge) {
+    const fn = EDGE_DEMO[edge[1]];
+    if (!fn) return { ok: true, demo: true, function: edge[1], payload: body };
+    return fn(body);
+  }
+
   if (path === '/api/v1/chatbots') return { chatbots: CHATBOTS };
 
   if (path === '/api/v1/stats') {

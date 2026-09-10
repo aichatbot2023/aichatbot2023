@@ -26,23 +26,50 @@ uz uslov da je opoziv (revocation) implementiran i TTL kratak.
 
 OAuth se uvek može dodati kasnije bez menjanja alata.
 
-## Šta klijent dobija
+## Jedan server, četiri uloge
 
-Devet alata, podrazumevano samo za čitanje:
+Isti server opslužuje i krajnjeg klijenta i vas. Šta ko vidi određuje **uloga upisana u token**,
+a ne konfiguracija servera — pa nema dva servera za održavanje.
 
-| Alat | Šta radi |
-|---|---|
-| `list_chatbots` | Lista chatbotova sa kanalima i statusom |
-| `get_stats` | Razgovori, leadovi, % rešenih bez operatera, sentiment |
-| `list_conversations` | Razgovori sa filterima (kanal, kategorija, sentiment, datum) |
-| `get_conversation` | Ceo transkript jednog razgovora |
-| `list_leads` | Prikupljeni kontakti |
-| `search_knowledge` | Pretraga baze znanja bota |
-| `ask_chatbot` | Postavi pitanje botu i vidi kako odgovara |
-| `add_knowledge` * | Dodaj tekst ili URL u bazu znanja |
-| `reply_to_conversation` * | Pošalji odgovor korisniku u razgovoru |
+| Uloga | Alata | Za koga |
+|---|---|---|
+| `client` | 8 | Krajnji klijent — svoj nalog, samo čitanje |
+| `client_write` | 10 | Klijent kome ste odobrili izmene na svom nalogu |
+| `sales` | 15 | Prodavci i partneri — demo botovi, traženje firmi |
+| `owner` | 26 | Vi — cela platforma, uključujući `read_table` i `invoke_platform_function` |
 
-\* rade samo uz `MCP_ALLOW_WRITE=true` i scope `write` u tokenu
+```bash
+node scripts/mint-token.mjs --tenant acme --role client   # link za klijenta
+node scripts/mint-token.mjs --tenant acme --role owner    # vaš link
+```
+
+### Tvrdo pravilo izolacije
+
+Iznad scope-ova stoji pravilo koje scope ne može da probije: alat označen
+`crossTenant: true` čita ili menja podatke **cele platforme** i zato je dostupan
+isključivo ulozi `owner` — i kada bi token nekako dobio odgovarajući scope.
+
+Zato dodavanje dozvole klijentu ne može slučajno da otvori tuđe podatke.
+Token kome ručno dodelite `platform:invoke` bez uloge `owner` ne dobija ništa —
+server ga odbija sa jasnom porukom. To pokriva `test/smoke.mjs`.
+
+### Alati
+
+**Nalog klijenta** (tenant se uvek čita iz tokena, nikad iz argumenata)
+`list_chatbots` · `get_stats` · `list_conversations` · `get_conversation` ·
+`list_leads` · `search_knowledge` · `ask_chatbot` · `chat_with_bot` ·
+`add_knowledge` \* · `reply_to_conversation` \*
+
+**Prodaja** (spoljni izvori i sopstveni nalog — ne otkrivaju tuđe podatke)
+`create_chatbot_from_website` \* · `get_demo_link` · `send_demo_email` \* ·
+`find_leads` · `enrich_leads` · `verify_emails` · `research_company`
+
+**Platforma** (samo `owner`)
+`platform_stats` · `delete_chatbot` \* · `list_contacts` · `send_newsletter` \* ·
+`run_agent_task` \* · `get_agent_run` · `ai_tim_command` \* · `read_table` ·
+`invoke_platform_function` \*
+
+\* traže i `MCP_ALLOW_WRITE=true` — jedan prekidač koji gasi sve što menja ili šalje
 
 ## Brzi start (bez backenda)
 
@@ -73,9 +100,14 @@ Nginx konfiguracija i lista endpointa koje backend treba da izloži:
 ```
 src/index.js        HTTP sloj, provera tokena, rate limit
 src/auth.js         HMAC tokeni (mint/verify), opoziv, rate limit
+src/scopes.js       scope-ovi i uloge - jedino mesto gde se menjaju dozvole
 src/mcp-server.js   MCP instanca po zahtevu (stateless)
-src/tools.js        definicije alata
-src/api.js          jedina tačka dodira sa backendom platforme
+src/tools/index.js  registar alata i pravilo izolacije
+src/tools/client.js     alati nad nalogom klijenta
+src/tools/sales.js      demo botovi i traženje firmi
+src/tools/platform.js   alati nad celom platformom (owner)
+src/api.js          REST backend + Supabase edge funkcije
+src/platform-functions.js  mapa alat -> edge funkcija
 src/demo.js         lažni podaci za DEMO_MODE
 scripts/mint-token.mjs
 web/connect-widget.html   isečak za dashboard ("Kopiraj link")

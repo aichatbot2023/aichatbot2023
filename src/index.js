@@ -4,6 +4,7 @@ import { config, assertConfig } from './config.js';
 import { log, maskToken } from './log.js';
 import { AuthError, verifyToken, assertNotRevoked, checkRateLimit, rateLimitKey } from './auth.js';
 import { buildServer } from './mcp-server.js';
+import { visibleTools } from './tools/index.js';
 
 const app = express();
 app.disable('x-powered-by');
@@ -45,9 +46,26 @@ async function handleMcp(req, res) {
     });
   }
 
+  // Token cija uloga ne otvara nijedan alat: reci to odmah, jasno.
+  // Bez ovoga bi se konektor povezao pa pucao na 'Method not found'.
+  const allowed = visibleTools(ctx);
+  if (allowed.length === 0) {
+    log.warn('Token bez ijednog dozvoljenog alata', { tenant: ctx.tenantId, role: ctx.role });
+    return res.status(403).json({
+      jsonrpc: '2.0',
+      error: {
+        code: -32002,
+        message: `Ovaj token (uloga "${ctx.role}") nema nijedan dozvoljen alat. Generisi novi link u dashboardu.`,
+      },
+      id: null,
+    });
+  }
+
   log.info('MCP zahtev', {
     tenant: ctx.tenantId,
     user: ctx.userId,
+    role: ctx.role,
+    tools: allowed.length,
     method: req.body?.method,
   });
 

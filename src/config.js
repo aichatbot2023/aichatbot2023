@@ -16,6 +16,12 @@ export const config = {
   apiServiceKey: process.env.AICHATBOT_SERVICE_KEY || '',
   apiTimeoutMs: Number(process.env.AICHATBOT_TIMEOUT_MS || 20000),
 
+  // Supabase edge funkcije - postojeci alati platforme se pozivaju preko njih.
+  supabaseUrl: (process.env.SUPABASE_URL || '').replace(/\/$/, ''),
+  supabaseServiceKey: process.env.SUPABASE_SERVICE_KEY || '',
+  // Mapa alat -> ime edge funkcije, ako se kod vas zovu drugacije.
+  edgeMapOverride: process.env.EDGE_MAP_JSON || '',
+
   // Bez backenda - vraca demo podatke. Za testiranje veze sa Claude-om.
   demoMode: bool(process.env.DEMO_MODE, false),
 
@@ -43,6 +49,9 @@ export function assertConfig() {
   }
   if (!config.demoMode && !config.apiServiceKey) {
     problems.push('AICHATBOT_SERVICE_KEY nije postavljen (obavezan van DEMO_MODE).');
+  }
+  if (!config.demoMode && !config.supabaseUrl) {
+    problems.push('SUPABASE_URL nije postavljen - alati platforme (demo, leadovi, agenti) nece raditi.');
   }
   return problems;
 }

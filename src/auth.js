@@ -1,11 +1,15 @@
 import crypto from 'node:crypto';
 import { config } from './config.js';
 import { log } from './log.js';
+import { ROLES, normalizeGrant } from './scopes.js';
 
 /**
  * Token je samopotvrdjujuci (HMAC) - MCP server ne mora u bazu da bi znao ciji je.
  * Format:  v1.<base64url(payload)>.<base64url(hmac_sha256(payload, secret))>
- * Payload: { t: tenantId, u: userId, e: email, s: [scopes], iat, exp }
+ * Payload: { t: tenantId, u: userId, e: email, r: role, s: [scopes], iat, exp }
+ *
+ * `r` je uloga (client, client_write, sales, owner) - odredjuje koje alate token vidi.
+ * `s` se upisuje samo kad se trazi rucni skup scope-ova mimo uloga.
  */
 
 const b64u = (buf) => Buffer.from(buf).toString('base64url');
@@ -15,15 +19,19 @@ function sign(payloadB64, secret) {
   return b64u(crypto.createHmac('sha256', secret).update(payloadB64).digest());
 }
 
-export function mintToken({ tenantId, userId, email, scopes = ['read'], ttlDays = 365 }, secret = config.tokenSecret) {
+export function mintToken({ tenantId, userId, email, role = 'client', scopes, ttlDays = 365 }, secret = config.tokenSecret) {
   if (!secret) throw new Error('MCP_TOKEN_SECRET nije postavljen.');
   if (!tenantId) throw new Error('tenantId je obavezan.');
+  if (role && role !== 'custom' && !ROLES[role]) {
+    throw new Error(`Nepoznata uloga "${role}". Dozvoljene: ${Object.keys(ROLES).join(', ')}.`);
+  }
   const now = Math.floor(Date.now() / 1000);
   const payload = {
     t: String(tenantId),
     u: userId ? String(userId) : undefined,
     e: email || undefined,
-    s: scopes,
+    r: role,
+    s: scopes && scopes.length ? scopes : undefined,
     iat: now,
     exp: ttlDays > 0 ? now + ttlDays * 86400 : undefined,
   };
@@ -62,11 +70,14 @@ export function verifyToken(token, secret = config.tokenSecret) {
     throw new AuthError('Token je istekao. Generisi novi u AiChatBot dashboardu.');
   }
 
+  const grant = normalizeGrant({ role: payload.r, scopes: payload.s });
+
   return {
     tenantId: payload.t,
     userId: payload.u || null,
     email: payload.e || null,
-    scopes: Array.isArray(payload.s) ? payload.s : ['read'],
+    role: grant.role,
+    scopes: grant.scopes,
     issuedAt: payload.iat,
     expiresAt: payload.exp || null,
   };
