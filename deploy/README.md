@@ -90,6 +90,38 @@ treba i Lovable deploy, inače na sajtu nema ničega.
 Treće, `docs/DESIGN-SYSTEM.md` traži **kompletan SR + EN** za svaku stranicu i
 sekciju — i sekcija i javna strana imaju lokalni STR rečnik za oba jezika.
 
+## Samo za pretplatnike
+
+Konektor je deo plaćenog paketa. Pretplatnik je definisan **isto kao u
+`src/hooks/useIsSubscriber.ts`** — red u `user_subscriptions` sa
+`status = 'active'` i `current_period_end` u budućnosti. Nije uvedena nova
+definicija, da se dve ne raziđu kad se jedna promeni.
+
+Brana stoji na dva mesta, jer jedno nije dovoljno:
+
+| Gde | Kada | Odgovor |
+|---|---|---|
+| `claude-connector-link` | pri izdavanju linka | 402, link se ne izdaje |
+| `claude-connector` | na **svakom** zahtevu | 402, postojeći link prestaje da radi |
+
+Druga provera je bitna: bez nje bi link izdat dok je pretplata bila aktivna
+radio zauvek. Ovako pretplata istekne i pristup pada sam, bez ručnog opoziva.
+
+Sekcija bez pretplate prikazuje zatvoreno stanje sa linkom na pakete umesto
+dugmeta — ali to je samo uljudnost prema korisniku; prava brana je serverska.
+
+### Ako neko treba da dobije pristup bez Stripe pretplate
+
+`MCP_ALLOWED_USER_IDS` propušta nalog mimo provere:
+
+```
+MCP_ALLOWED_USER_IDS=<uuid-1>,<uuid-2>
+```
+
+Koristi se za interni test ili klijenta koji plaća van platforme. Nije vezano
+za ime ni mejl, nego za `user_id` iz `auth.users` — pa prestaje da važi ako se
+nalog obriše, i vidi se u secrets listi ko je propušten.
+
 ## Koraci
 
 1. **Tajna za potpisivanje** (različita od `MCP_CONNECTOR_TOKEN`):

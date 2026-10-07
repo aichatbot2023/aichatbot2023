@@ -6,9 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/components/LanguageProvider";
+import { useIsSubscriber } from "@/hooks/useIsSubscriber";
 import {
   Sparkles, Copy, Check, Eye, EyeOff, ShieldAlert, Trash2,
-  Loader2, ExternalLink, KeyRound,
+  Loader2, ExternalLink, KeyRound, Lock,
 } from "lucide-react";
 
 /**
@@ -56,6 +57,11 @@ const STR = {
       "Klikni + Add custom connector i nalepi link",
       "U razgovoru: + → Connectors → uključi aichatbot-rs",
     ],
+    lockedBadge: "Uz pretplatu",
+    lockedTitle: "Konektor je deo plaćenog paketa",
+    lockedBody:
+      "Aktiviraj pretplatu i moći ćeš da povežeš nalog sa Claude-om i pitaš ga o razgovorima, leadovima i statistici.",
+    lockedCta: "Pogledaj pakete",
     locale: "sr-RS",
   },
   en: {
@@ -92,6 +98,11 @@ const STR = {
       "Click + Add custom connector and paste the link",
       "In a chat: + → Connectors → enable aichatbot-rs",
     ],
+    lockedBadge: "Paid plan",
+    lockedTitle: "The connector is part of a paid plan",
+    lockedBody:
+      "Activate a subscription and you will be able to connect your account to Claude and ask it about conversations, leads and stats.",
+    lockedCta: "See plans",
     locale: "en-US",
   },
 };
@@ -106,6 +117,7 @@ interface LinkStatus {
 export default function ClaudeConnectorSection() {
   const { toast } = useToast();
   const { language } = useLanguage();
+  const { isSubscriber, loading: subLoading } = useIsSubscriber();
   const T = STR[language === "sr" ? "sr" : "en"];
   const datum = (iso: string | null) =>
     iso ? new Date(iso).toLocaleDateString(T.locale, { day: "numeric", month: "long", year: "numeric" }) : "—";
@@ -194,10 +206,24 @@ export default function ClaudeConnectorSection() {
       </CardHeader>
 
       <CardContent className="space-y-5">
-        {loading ? (
+        {loading || subLoading ? (
           <p className="text-sm text-muted-foreground flex items-center gap-2">
             <Loader2 className="w-4 h-4 animate-spin" /> {T.loading}
           </p>
+        ) : !isSubscriber ? (
+          /* Bez pretplate nema ni dugmeta. Pravu branu drzi server
+             (claude-connector-link vraca 402), ovo je samo da korisnik
+             ne klikne u gresku. */
+          <div className="flex gap-3 rounded-md border bg-muted/40 p-4">
+            <Lock className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
+            <div className="space-y-2">
+              <h3 className="text-sm font-semibold">{T.lockedTitle}</h3>
+              <p className="text-sm text-muted-foreground">{T.lockedBody}</p>
+              <Button asChild size="sm" variant="outline">
+                <a href="/subscription">{T.lockedCta}</a>
+              </Button>
+            </div>
+          </div>
         ) : (
           <>
             {/* Sveže generisan link — jedini trenutak kada se vidi */}

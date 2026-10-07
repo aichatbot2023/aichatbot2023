@@ -14,6 +14,10 @@ const SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const SIGNING_SECRET = Deno.env.get('MCP_SIGNING_SECRET') || '';
 // Javna adresa konektora. Preko /mcp na vasem domenu klijent ne vidi Supabase URL.
 const CONNECTOR_URL = Deno.env.get('MCP_PUBLIC_URL') || 'https://aichatbot.rs/mcp';
+// Nalozi koji dobijaju konektor bez Stripe pretplate (interni test, ili
+// klijent koji placa van platforme). Zarezom razdvojeni user_id-jevi.
+const ALLOWED_USER_IDS = (Deno.env.get('MCP_ALLOWED_USER_IDS') || '')
+  .split(',').map((s) => s.trim()).filter(Boolean);
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -27,6 +31,23 @@ const json = (body: unknown, status = 200) =>
 // Uloge koje klijent sme sam sebi da izda. `owner` nije na listi i nikad nece biti.
 const SELF_SERVICE_ROLES: Role[] = ['client', 'client_write'];
 const DEFAULT_TTL_DAYS = 90;
+
+/**
+ * Konektor je deo placenog paketa.
+ * Ista definicija pretplatnika kao u src/hooks/useIsSubscriber.ts:
+ * aktivna pretplata kojoj period nije istekao.
+ */
+async function hasActiveSubscription(admin: any, userId: string): Promise<boolean> {
+  if (ALLOWED_USER_IDS.includes(userId)) return true;
+  const { data } = await admin
+    .from('user_subscriptions')
+    .select('status, current_period_end')
+    .eq('user_id', userId)
+    .eq('status', 'active')
+    .gt('current_period_end', new Date().toISOString())
+    .maybeSingle();
+  return Boolean(data);
+}
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
@@ -70,10 +91,21 @@ Deno.serve(async (req) => {
       .order('created_at', { ascending: false })
       .limit(1);
     // Sam token se NE cuva, pa ga ne mozemo ponovo pokazati - samo da li postoji.
-    return json({ active: Boolean(data?.[0]), link: data?.[0] || null });
+    return json({
+      active: Boolean(data?.[0]),
+      link: data?.[0] || null,
+      subscribed: await hasActiveSubscription(admin, user.id),
+    });
   }
 
   /* ── izdavanje ─────────────────────────────────────────────────────────── */
+  if (!(await hasActiveSubscription(admin, user.id))) {
+    return json({
+      error: 'Claude konektor je deo plaćenog paketa. Aktiviraj pretplatu pa generiši link.',
+      code: 'subscription_required',
+    }, 402);
+  }
+
   const role: Role = SELF_SERVICE_ROLES.includes(body.role) ? body.role : 'client';
   const ttlDays = Math.min(Math.max(Number(body.ttl_days) || DEFAULT_TTL_DAYS, 1), 365);
 

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/components/LanguageProvider";
-import { Sparkles, ExternalLink, ShieldAlert, Terminal, Users } from "lucide-react";
+import { Sparkles, ExternalLink, ShieldAlert, Terminal, Users, Lock } from "lucide-react";
 
 /**
  * /uputstvo/claude — javno uputstvo (bez prijave), da može da se pošalje i
@@ -62,6 +62,7 @@ const STR = {
       ["Da li mi treba plaćeni Claude nalog?", "Radi i na besplatnom, s tim što besplatni dozvoljava samo jedan custom konektor."],
       ['Ne vidim „Add custom connector”', "Ta opcija postoji na claude.ai u pregledaču i u desktop aplikaciji, ali još ne i u mobilnoj. Dodaj konektor na računaru — posle radi i na telefonu."],
     ] as [string, string][],
+    needSub: "Konektor je deo plaćenog paketa — potrebna je aktivna pretplata.",
     footerAsk: "Zapeo si negde? Piši nam na",
     footerCta: "Generiši link →",
   },
@@ -114,6 +115,7 @@ const STR = {
       ["Do I need a paid Claude plan?", "It works on the free plan too, except the free plan allows only one custom connector."],
       ['I cannot see "Add custom connector"', "That option exists on claude.ai in the browser and in the desktop app, but not yet on mobile. Add the connector on a computer — afterwards it works on your phone too."],
     ] as [string, string][],
+    needSub: "The connector is part of a paid plan — an active subscription is required.",
     footerAsk: "Stuck somewhere? Write to us at",
     footerCta: "Generate link →",
   },
@@ -157,6 +159,9 @@ export default function UputstvoClaude() {
           {T.h1}
         </h1>
         <p className="text-muted-foreground text-lg">{T.lead}</p>
+        <p className="text-sm text-muted-foreground flex items-center gap-1.5">
+          <Lock className="w-3.5 h-3.5 shrink-0" /> {T.needSub}
+        </p>
       </header>
 
       <section className="space-y-4">

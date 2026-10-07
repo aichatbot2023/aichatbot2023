@@ -16,6 +16,10 @@ const CONNECTOR_TOKEN = Deno.env.get('MCP_CONNECTOR_TOKEN') || '';
 // Tajna kojom se potpisuju klijentski linkovi (uloge client/client_write/sales).
 // Razlicita od MCP_CONNECTOR_TOKEN: taj ostaje vas owner pristup.
 const SIGNING_SECRET = Deno.env.get('MCP_SIGNING_SECRET') || '';
+// Nalozi koji dobijaju konektor bez Stripe pretplate (npr. interni test,
+// ili klijent koji placa van platforme). Zarezom razdvojeni user_id-jevi.
+const ALLOWED_USER_IDS = (Deno.env.get('MCP_ALLOWED_USER_IDS') || '')
+  .split(',').map((s) => s.trim()).filter(Boolean);
 const SITE_ORIGIN = 'https://aichatbot.rs';
 
 const supabase = createClient(SUPABASE_URL, SERVICE_KEY);
@@ -632,6 +636,25 @@ Deno.serve(async (req) => {
     const { data: link } = await supabase.from('claude_connector_links').select('revoked_at').eq('token_hash', ctx.tokenHash).maybeSingle();
     if (link?.revoked_at) {
       return new Response(JSON.stringify({ error: 'Pristup je opozvan. Generisi novi link u dashboardu.' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+  }
+
+  // Konektor je deo placenog paketa. Ista definicija pretplatnika kao u
+  // src/hooks/useIsSubscriber.ts - aktivna pretplata koja nije istekla.
+  // Proverava se na SVAKOM zahtevu, pa link prestaje da radi kad pretplata
+  // istekne, bez potrebe da ga neko rucno opoziva.
+  if (ctx.tenantId && !ALLOWED_USER_IDS.includes(ctx.tenantId)) {
+    const { data: sub } = await supabase
+      .from('user_subscriptions')
+      .select('status, current_period_end')
+      .eq('user_id', ctx.tenantId)
+      .eq('status', 'active')
+      .gt('current_period_end', new Date().toISOString())
+      .maybeSingle();
+    if (!sub) {
+      return new Response(JSON.stringify({
+        error: 'Claude konektor je deo placenog paketa. Aktiviraj pretplatu na aichatbot.rs/subscription pa generisi novi link.',
+      }), { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
   }
 
