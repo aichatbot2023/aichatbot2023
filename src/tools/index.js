@@ -22,6 +22,10 @@ export function visibleTools(ctx) {
     if (t.crossTenant && !isOwner(ctx)) return false;
     if (!can(ctx, t.scope)) return false;
     if (t.write && !config.allowWrite) return false;
+    // Alati koji su direktni upiti u bazu platforme rade samo u edge verziji
+    // konektora (deploy/lovable-chatbot-studio). Ovde se ne nude da lista
+    // ne obecava sto server ne moze.
+    if (t.needsPlatformDb) return false;
     return true;
   });
 }

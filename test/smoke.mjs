@@ -51,7 +51,9 @@ async function connect(tokenOpts) {
 
 console.log('\n— vidljivost alata po ulozi —');
 
-const PLATFORM_ONLY = ['read_table', 'invoke_platform_function', 'send_newsletter', 'platform_stats', 'delete_chatbot', 'list_contacts', 'run_agent_task', 'ai_tim_command'];
+// read_table i platform_stats traze bazu platforme -> samo edge verzija.
+const PLATFORM_ONLY = ['invoke_platform_function', 'send_newsletter', 'delete_chatbot', 'list_contacts', 'run_agent_task', 'ai_tim_command'];
+const EDGE_ONLY = ['read_table', 'platform_stats'];
 
 const client = await connect({ role: 'client' });
 console.log(`client       : ${client.names.length} alata`);
@@ -72,12 +74,12 @@ check(sales.names.includes('find_leads'), 'sales vidi find_leads');
 check(sales.names.includes('create_chatbot_from_website'), 'sales vidi create_chatbot_from_website');
 check(sales.names.includes('send_demo_email'), 'sales vidi send_demo_email');
 check(!sales.names.includes('send_newsletter'), 'sales NE vidi send_newsletter');
-check(!sales.names.includes('read_table'), 'sales NE vidi read_table');
 check(!sales.names.includes('invoke_platform_function'), 'sales NE vidi invoke_platform_function');
 
 const owner = await connect({ role: 'owner' });
 console.log(`owner        : ${owner.names.length} alata`);
 for (const n of PLATFORM_ONLY) check(owner.names.includes(n), `owner vidi ${n}`);
+for (const n of EDGE_ONLY) check(!owner.names.includes(n), `${n} se ne nudi u standalone serveru (samo edge)`);
 
 /* ---------- 2. tvrdo pravilo izolacije ---------- */
 
@@ -100,10 +102,10 @@ check(sneakyRes.status === 403, `platformski scope bez uloge owner ne otvara nis
 check(/nema nijedan dozvoljen alat/.test(sneakyBody?.error?.message || ''), 'poruka o odbijanju je jasna');
 
 // Alat koji uloga ne vidi mora da bude odbijen i pri direktnom pozivu po imenu.
-const denied = await client.client.callTool({ name: 'read_table', arguments: { table: 'bots' } });
+const denied = await client.client.callTool({ name: 'invoke_platform_function', arguments: { function_name: 'x' } });
 check(
   denied.isError === true && /not found/i.test(denied.content[0].text),
-  `direktan poziv read_table sa client tokenom odbijen (${denied.content[0].text.slice(0, 45)})`
+  `direktan poziv invoke_platform_function sa client tokenom odbijen (${denied.content[0].text.slice(0, 45)})`
 );
 const denied2 = await sales.client.callTool({ name: 'send_newsletter', arguments: { name: 'x', subject: 'y', html_content: 'zzzzzzzzzzz' } });
 check(denied2.isError === true, 'direktan poziv send_newsletter sa sales tokenom odbijen');
@@ -123,8 +125,6 @@ const calls = [
   [sales.client, 'chat_with_bot', { bot_id: 'bot_web', message: 'Zdravo' }],
   [sales.client, 'find_leads', { industry: 'stomatolog', location: 'Novi Sad', limit: 2 }],
   [sales.client, 'get_demo_link', { bot_id: 'bot_web' }],
-  [owner.client, 'platform_stats', {}],
-  [owner.client, 'read_table', { table: 'bots', limit: 3 }],
   [owner.client, 'invoke_platform_function', { function_name: 'bilo-sta', payload: { a: 1 } }],
 ];
 

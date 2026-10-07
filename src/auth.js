@@ -25,6 +25,11 @@ export function mintToken({ tenantId, userId, email, role = 'client', scopes, tt
   if (role && role !== 'custom' && !ROLES[role]) {
     throw new Error(`Nepoznata uloga "${role}". Dozvoljene: ${Object.keys(ROLES).join(', ')}.`);
   }
+  // Link koji nikad ne istice je rupa: token zivi i kad korisnik ode iz firme.
+  // Zato nema opcije "bez roka" - ako treba duze, zadaj veci broj dana.
+  if (!Number.isFinite(ttlDays) || ttlDays <= 0) {
+    throw new Error('ttlDays mora biti pozitivan broj - token bez roka se ne izdaje.');
+  }
   const now = Math.floor(Date.now() / 1000);
   const payload = {
     t: String(tenantId),
@@ -33,7 +38,7 @@ export function mintToken({ tenantId, userId, email, role = 'client', scopes, tt
     r: role,
     s: scopes && scopes.length ? scopes : undefined,
     iat: now,
-    exp: ttlDays > 0 ? now + ttlDays * 86400 : undefined,
+    exp: now + ttlDays * 86400,
   };
   const payloadB64 = b64u(JSON.stringify(payload));
   return `v1.${payloadB64}.${sign(payloadB64, secret)}`;

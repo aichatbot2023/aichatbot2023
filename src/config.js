@@ -16,6 +16,9 @@ export const config = {
   apiServiceKey: process.env.AICHATBOT_SERVICE_KEY || '',
   apiTimeoutMs: Number(process.env.AICHATBOT_TIMEOUT_MS || 20000),
 
+  // Javni domen platforme - za sastavljanje demo i embed linkova.
+  siteOrigin: (process.env.SITE_ORIGIN || 'https://aichatbot.rs').replace(/\/$/, ''),
+
   // Supabase edge funkcije - postojeci alati platforme se pozivaju preko njih.
   supabaseUrl: (process.env.SUPABASE_URL || '').replace(/\/$/, ''),
   supabaseServiceKey: process.env.SUPABASE_SERVICE_KEY || '',

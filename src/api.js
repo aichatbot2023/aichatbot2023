@@ -100,7 +100,16 @@ export const api = {
   chatWithBot: (ctx, p) => edge(ctx, 'chat_with_bot', p),
   createChatbotFromWebsite: (ctx, p) => edge(ctx, 'create_chatbot_from_website', p),
   deleteChatbot: (ctx, p) => edge(ctx, 'delete_chatbot', p),
-  getDemoLink: (ctx, p) => edge(ctx, 'get_demo_link', p),
+  // Nije edge funkcija - samo sastavljanje linka, isto kao u platformi.
+  getDemoLink: (_ctx, p) => {
+    if (!p.bot_id) throw new ApiError('bot_id je obavezan.', 400);
+    const url = `${config.siteOrigin}/widget/${p.bot_id}`;
+    return {
+      demo_link: url,
+      autoopen_link: `${url}?autoOpen=true`,
+      embed_code: `<script src="${config.siteOrigin}/widget-loader.js" data-bot-id="${p.bot_id}" async></script>`,
+    };
+  },
   sendDemoEmail: (ctx, p) => edge(ctx, 'send_demo_email', p),
   findLeads: (ctx, p) => edge(ctx, 'find_leads', p),
   enrichLeads: (ctx, p) => edge(ctx, 'enrich_leads', p),
@@ -111,8 +120,15 @@ export const api = {
   runAgentTask: (ctx, p) => edge(ctx, 'run_agent_task', p),
   getAgentRun: (ctx, p) => edge(ctx, 'get_agent_run', p),
   aiTimCommand: (ctx, p) => edge(ctx, 'ai_tim_command', p),
-  platformStats: (ctx, p) => edge(ctx, 'platform_stats', p),
-  readTable: (ctx, p) => edge(ctx, 'read_table', p),
+  // platform_stats i read_table su direktni upiti u Supabase, ne edge funkcije.
+  // Standalone server nema Supabase klijenta, pa ih ne nudi - registar ih
+  // isklucuje preko needsPlatformDb. Vidi deploy/README.md.
+  platformStats: () => {
+    throw new ApiError('platform_stats radi samo u edge verziji konektora (deploy/).', 501);
+  },
+  readTable: () => {
+    throw new ApiError('read_table radi samo u edge verziji konektora (deploy/).', 501);
+  },
   invokeFunction: (ctx, { function_name, payload }) =>
     edge(ctx, 'invoke', payload || {}, { functionName: function_name }),
 

@@ -9,6 +9,7 @@ import { READABLE_TABLES } from './../platform-functions.js';
 export const platformTools = [
   {
     name: 'platform_stats',
+    needsPlatformDb: true,
     scope: 'stats:read',
     crossTenant: true,
     title: 'Brojke cele platforme',
@@ -100,6 +101,7 @@ export const platformTools = [
   },
   {
     name: 'read_table',
+    needsPlatformDb: true,
     scope: 'platform:read',
     crossTenant: true,
     title: 'Citanje tabele',
