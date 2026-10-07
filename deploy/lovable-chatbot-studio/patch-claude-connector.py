@@ -41,7 +41,7 @@ const ALLOWED_USER_IDS = (Deno.env.get('MCP_ALLOWED_USER_IDS') || '')
 sub(
 """import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0';""",
 """import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0';
-import { type Ctx, isOwner, resolveToken, AuthError } from './_scope.ts';""",
+import { type Ctx, isOwner, resolveToken, AuthError } from '../_shared/claudeScope.ts';""",
 "import _scope")
 
 # ── 2. tenant-aware vlasnik ─────────────────────────────────────────────────

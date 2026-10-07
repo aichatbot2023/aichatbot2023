@@ -122,6 +122,18 @@ Koristi se za interni test ili klijenta koji plaća van platforme. Nije vezano
 za ime ni mejl, nego za `user_id` iz `auth.users` — pa prestaje da važi ako se
 nalog obriše, i vidi se u secrets listi ko je propušten.
 
+## Zašto je `claudeScope.ts` u `_shared/`
+
+Prva verzija je držala taj modul u `claude-connector/_scope.ts`, a
+`claude-connector-link` ga je uvozio kao `../claude-connector/_scope.ts`.
+**Deploy je zato padao** sa „Module not found": Supabase bundler pakuje svaku
+funkciju izolovano i u paket ulazi samo njena fascikla i `_shared/`. Uvoz iz
+srodne funkcijske fascikle se ne razrešava.
+
+Modul je zato u `supabase/functions/_shared/claudeScope.ts`, gde stoji i
+ostali deljeni kod (`llm.ts`, `tajne.ts`, `cron.ts`). Ako ga ikada vratite u
+fasciklu jedne funkcije, deploy druge će pasti na isti način.
+
 ## Koraci
 
 1. **Tajna za potpisivanje** (različita od `MCP_CONNECTOR_TOKEN`):

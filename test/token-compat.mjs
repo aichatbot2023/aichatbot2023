@@ -9,7 +9,7 @@ const SECRET = 'tajna-za-potpisivanje-dovoljno-dugacka-1234567890';
 process.env.MCP_TOKEN_SECRET = SECRET;
 
 const node = await import('../src/auth.js');
-const deno = await import('../deploy/lovable-chatbot-studio/supabase/functions/claude-connector/_scope.ts');
+const deno = await import('../deploy/lovable-chatbot-studio/supabase/functions/_shared/claudeScope.ts');
 
 let failed = 0;
 const check = (ok, label) => { if (!ok) failed++; console.log(`${ok ? 'OK  ' : 'FAIL'} ${label}`); };

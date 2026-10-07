@@ -41,7 +41,7 @@ def copy(rel):
 for f in [
     'src/components/ClaudeConnectorSection.tsx',
     'src/pages/UputstvoClaude.tsx',
-    'supabase/functions/claude-connector/_scope.ts',
+    'supabase/functions/_shared/claudeScope.ts',
     'supabase/functions/claude-connector/index.ts',
     'supabase/functions/claude-connector-link/index.ts',
     'supabase/migrations/20261007000000_claude_connector_links.sql',

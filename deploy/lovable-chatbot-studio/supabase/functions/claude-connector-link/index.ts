@@ -7,7 +7,7 @@
 // Nalog se UVEK cita iz JWT-a, nikad iz tela zahteva - klijent ne moze
 // da izdaje link za tudji nalog.
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0';
-import { mintToken, sha256Hex, type Role } from '../claude-connector/_scope.ts';
+import { mintToken, sha256Hex, type Role } from '../_shared/claudeScope.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
