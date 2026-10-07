@@ -33,26 +33,50 @@ na ulogu `owner`, pa ne morate ništa da menjate u svom Claude podešavanju.
 ## Fajlovi
 
 ```
-supabase/functions/claude-connector/_scope.ts    NOVO  uloge, scope-ovi, HMAC tokeni
-supabase/functions/claude-connector/index.ts     PATCH 16 izmena nad originalom
-supabase/functions/claude-connector-link/        NOVO  izdaje i opoziva klijentski link
-supabase/migrations/2026...claude_connector_links.sql  NOVO  tabela za opoziv
-public/uputstvo/claude/index.html                NOVO  uputstvo za klijente
-_redirects.dodatak                                      dva pravila za public/_redirects
+NOVI
+src/components/ClaudeConnectorSection.tsx        sekcija u dashboardu: generiši / kopiraj / opozovi
+src/pages/UputstvoClaude.tsx                     javna strana /uputstvo/claude
+supabase/functions/claude-connector/_scope.ts    uloge, scope-ovi, HMAC tokeni
+supabase/functions/claude-connector-link/        izdaje i opoziva klijentski link
+supabase/migrations/2026...claude_connector_links.sql   tabela za opoziv
+
+MENJANI (patch, ostalo bajt-identično)
+supabase/functions/claude-connector/index.ts     16 izmena — uloge i izolacija naloga
+src/pages/Integrations.tsx                       2 izmene — sekcija na /integracije
+src/App.tsx                                      2 izmene — javna ruta
+vite-plugins/route-meta.ts                       1 izmena — link preview nove rute
+public/_redirects                                1 pravilo — /mcp pod vašim domenom
 ```
 
-`index.ts` je generisan skriptom `patch-claude-connector.py` iz vašeg originala,
-pa su svi delovi koje patch ne dira **bajt-identični**. Ako kasnije promenite
-original, pustite skriptu ponovo:
+Dve skripte, oba puta pucaju ako marker nije nađen:
+
+| Skripta | Šta radi |
+|---|---|
+| `patch-claude-connector.py` | generiše patchovanu edge funkciju iz vašeg originala |
+| `patch-site.py` | primenjuje sve na repo — kopira nove fajlove i menja postojeće |
 
 ```bash
-python3 patch-claude-connector.py \
-  ../../lovable-chatbot-studio/supabase/functions/claude-connector/index.ts \
-  supabase/functions/claude-connector/index.ts
+cd deploy/lovable-chatbot-studio
+python3 patch-site.py /putanja/do/lovable-chatbot-studio
 ```
 
-Skripta **pukne** ako ne nađe marker, umesto da tiho promaši — to znači da se
-taj deo originala promenio i treba ga pogledati rukom.
+## Gde to klijent vidi
+
+**U dashboardu** — `/integracije`, prva sekcija. Dugme *Generiši link*, pa
+*Kopiraj*, pa tri koraka i *Opozovi pristup*. Link se prikazuje **samo jednom**
+jer se token ne čuva u bazi (samo sha256 hash, radi opoziva); posle osvežavanja
+vidi se da link postoji, ali ne i koji je.
+
+**Javno** — `aichatbot.rs/uputstvo/claude`, bez prijave, pa može da se pošalje i
+nekome koga još nema na platformi. Ima svoj link preview preko `route-meta`.
+
+Sekcija poziva `claude-connector-link`, koji nalog čita iz korisnikovog JWT-a —
+klijent ne može da izda link za tuđi nalog, i ne može sam sebi da izda `sales`
+ni `owner`.
+
+> Isečci `web/connect-widget.html` i `web/segment-uputstvo.html` u korenu ovog
+> repoa su iz faze pre pristupa pravom kodu i **zamenjeni** su React sekcijom.
+> Ostaju ako vam zatrebaju van Lovable aplikacije.
 
 ## Koraci
 
@@ -117,17 +141,30 @@ Ako ikada budete davali `platform_stats` ili `read_table` klijentima, prvo
 dodajte filter po nalogu u sam alat, pa tek onda skinite `crossTenant`.
 Dok to ne uradite, klijent ih ne može dobiti ni greškom.
 
-## Šta nije testirano
+## Šta je provereno
 
-Patch nije pokrenut protiv žive Supabase instance — Deno nije bio dostupan u
-okruženju u kom je pisan, a vaš projekat nije bio dohvatljiv. Provereno je:
+Patch je primenjen na pravi klon `lovable-chatbot-studio` i tamo:
 
-- da se svih 16 izmena primenilo na tačnim mestima i da je redosled deklaracija
-  ispravan (`TOOLS` → `TOOL_ACCESS` → `toolsFor` → `TOOLS.push` → `execTool`)
-- da su HMAC tokeni **međusobno kompatibilni** između dashboarda (Node) i
-  konektora (Deno): `test/token-compat.mjs` u korenu repoa pušta oba koda i
-  proverava oba smera, odbijanje pogrešne tajne, falsifikovanog potpisa,
-  isteklog tokena i pokušaja da se kroz link izda `owner`
+- **`tsc --noEmit` — 0 grešaka.** Repo i pre patcha nije imao nijednu, pa
+  dodatak ne unosi nove.
+- **`npm run build` prolazi.** `route-meta` je prešao sa 22 na 23 strane, što
+  potvrđuje da je nova ruta registrovana.
+- Patch je pušten **dva puta iz čistog stanja** — ponovljiv je.
+- HMAC tokeni su **međusobno kompatibilni** između dashboarda i konektora:
+  `test/token-compat.mjs` u korenu ovog repoa pušta i Node i Deno kod i
+  proverava oba smera, plus odbijanje pogrešne tajne, falsifikovanog potpisa,
+  isteklog tokena i pokušaja da se kroz link izda `owner`.
 
-Prvi deploy pustite na staging ili uz spreman rollback (`git revert` na
-`index.ts` vraća stari konektor — stari token i dalje radi).
+## Šta nije provereno
+
+Edge funkcije nisu pokrenute protiv žive Supabase instance — Deno nije bio
+dostupan u okruženju u kom su pisane. Konkretno nije potvrđeno:
+
+- da `claude-connector-link` dobija ispravan JWT kroz `supabase.functions.invoke`
+  (po dokumentaciji dobija, ali to nije izvršeno)
+- da `_redirects` proksi propušta POST sa query stringom na Lovable hostingu;
+  ako ne propušta, klijentov link ostaje direktan Supabase URL i sve radi, samo
+  je adresa manje lepa
+
+Prvi deploy pustite na staging ili uz spreman rollback — `git revert` na
+`index.ts` vraća stari konektor, a stari token radi i dalje.

@@ -1,9 +1,0 @@
-# Dodati u public/_redirects, PRE catch-all pravila `/* /index.html 200`.
-#
-# Claude konektor pod nasim domenom. Bez ovoga klijent u svom Claude
-# podesavanju vidi https://equjrxwpxrkchicetyvs.supabase.co/... - tudji
-# domen u linku izgleda nepouzdano i otkriva infrastrukturu.
-/mcp  https://equjrxwpxrkchicetyvs.supabase.co/functions/v1/claude-connector  200
-
-# Staticko uputstvo mora da se posluzi kao fajl, a ne da ga pojede SPA.
-/uputstvo/claude  /uputstvo/claude/index.html  200
