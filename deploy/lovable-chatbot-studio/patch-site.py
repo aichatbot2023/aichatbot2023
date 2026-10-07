@@ -15,10 +15,17 @@ here = pathlib.Path(__file__).parent
 applied = []
 
 def patch(rel, marker, replacement, label):
+    """Idempotentno: ako je izmena vec primenjena, preskace."""
     p = root / rel
     s = p.read_text(encoding='utf-8')
+    if replacement in s:
+        applied.append(f"{rel}: {label} (vec primenjeno)")
+        return
     if marker not in s:
-        raise SystemExit(f"GRESKA: marker nije nadjen u {rel} -> {label}")
+        raise SystemExit(
+            f"GRESKA: marker nije nadjen u {rel} -> {label}\n"
+            f"  Taj deo fajla se promenio. Pogledaj rucno, ne pretpostavljaj."
+        )
     if s.count(marker) != 1:
         raise SystemExit(f"GRESKA: marker nije jedinstven ({s.count(marker)}x) u {rel} -> {label}")
     p.write_text(s.replace(marker, replacement, 1), encoding='utf-8')
@@ -37,6 +44,7 @@ for f in [
     'supabase/functions/claude-connector/_scope.ts',
     'supabase/functions/claude-connector/index.ts',
     'supabase/functions/claude-connector-link/index.ts',
+    'supabase/migrations/20261007000000_claude_connector_links.sql',
 ]:
     copy(f)
 

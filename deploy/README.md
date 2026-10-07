@@ -78,6 +78,18 @@ ni `owner`.
 > repoa su iz faze pre pristupa pravom kodu i **zamenjeni** su React sekcijom.
 > Ostaju ako vam zatrebaju van Lovable aplikacije.
 
+## Dva pravila iz vašeg CLAUDE.md koja menjaju redosled
+
+**Git push ne objavljuje.** `CLAUDE.md` kaže: *„Frontend se objavljuje kroz
+Lovable `deploy_project` — sam git push NE objavljuje."* Dakle posle merge-a
+treba i Lovable deploy, inače na sajtu nema ničega.
+
+**DB izmene idu kroz Lovable agenta**, ne direktno u Supabase. Migracija
+`claude_connector_links` zato ide tim putem, a ne `psql`-om.
+
+Treće, `docs/DESIGN-SYSTEM.md` traži **kompletan SR + EN** za svaku stranicu i
+sekciju — i sekcija i javna strana imaju lokalni STR rečnik za oba jezika.
+
 ## Koraci
 
 1. **Tajna za potpisivanje** (različita od `MCP_CONNECTOR_TOKEN`):
