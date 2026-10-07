@@ -93,6 +93,15 @@ patch(
                     <Route path="/uputstvo/claude" element={<UputstvoClaude />} />""",
  "javna ruta /uputstvo/claude")
 
+# Uputstvo se SALJE KLIJENTIMA kao link, pa mora da radi iz prve.
+# Bez ovoga service worker na navigaciju vrati kesiranu ljusku starog
+# bundle-a, u kom te rute jos nema, i posetilac vidi 'strana ne postoji'.
+patch(
+ 'vite.config.ts',
+ '        navigateFallbackDenylist: [/^\\/~oauth/, /^\\/gods-eye\\//, /^\\/prezentacije\\//],',
+ '        // /uputstvo/ se salje klijentima kao link i mora da radi IZ PRVE.\n        // Sa fallback-om bi stari service worker vratio kesiranu ljusku\n        // prethodnog bundle-a (u kom rute nema) i klijent bi dobio\n        // "strana ne postoji".\n        navigateFallbackDenylist: [/^\\/~oauth/, /^\\/gods-eye\\//, /^\\/prezentacije\\//, /^\\/uputstvo\\//],',
+ "uputstvo van SW navigate fallback-a")
+
 # Link preview za javno uputstvo - taj link se salje klijentima.
 patch(
  'vite-plugins/route-meta.ts',
