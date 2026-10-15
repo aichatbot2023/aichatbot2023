@@ -103,3 +103,11 @@ office@aichatbot.rs · +381 61 252 6232
 **Ambasade (23, adrese iz Diplomatske liste MSP 29.9.2026):** Rusija (+trgovinsko pred.) · Belorusija · Crna Gora · S. Makedonija · BiH (na srpskom) — Grčka (+ekon.) · Kipar · Rumunija (+ekon.) · Bugarska · Gruzija · Jermenija · Egipat · Mađarska (+trgovina) · Slovačka · Kazahstan · Azerbejdžan · Izrael · SAD (protokol) · Italija · Katar · Turska (+ekon.) · Indija · Brazil (na engleskom)
 
 Nije poslato (adresa nije potvrđena): Kina, SwissCham, Nordic Business Alliance, Hellenic BA, CANSEE, British Business Centre, Rusko-srpski klub, Rotary, Lions, Slovenački poslovni klub, kanadska trgovinska sekcija.
+
+## Drugi talas 15.10.2026. (71 poziv)
+
+**Ambasade i misije (49, Diplomatska lista MSP):** Albanija, Alžir, Angola, Argentina, Australija, Austrija, Belgija (+hub.brussels), Kambodža, Kanada, Hrvatska, Češka (+trgovinsko), DR Kongo, Danska, Delegacija EU, Finska, Francuska, Nemačka, Gana, Apostolska nuncijatura, Indonezija, Iran, Irak, Irska, Japan, Koreja (+KOTRA), Kuvajt, Liban, Libija, Malezija, Meksiko, Maroko, Mjanmar, Holandija, Norveška, Pakistan, Palestina, Poljska, Portugal, Slovenija, Somalija, Malteški red, Španija (+trgovinsko), Švedska, Švajcarska, Sirija, Tunis, Ukrajina, UK, Venecuela.
+
+**Organizacije (22):** HORES, YUTA, Čovekoljublje, Turistička organizacija Srbije, SKGO, RARIS, RRA Zlatibor, RRA Srem, SEDA, RDA Bačka, Centar za razvoj Jablaničkog i Pčinjskog okruga, NTP Beograd, NTP Čačak, Poslovni inkubator Novi Sad, BITF, Smart Kolektiv, Trag fondacija, ABAS (Business Angels), SeVeN, Serbian Entrepreneurs, Nova Iskra, Catalyst Balkans.
+
+Nije pronađeno/izostavljeno: Kina (nema mejla), regionalne komore (deo PKS, već pozvana), Kolo srpskih sestara, ESN, poslovni klubovi Kragujevac/Niš, APPS (politička veza).
