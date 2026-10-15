@@ -83,7 +83,7 @@ AGENDA
 16:30 – Remarks by distinguished guests
 16:45 – Networking and business meetings
 
-Embassy representatives attend as our guests of honour. Kindly confirm attendance by replying to this e-mail or at +381 61 252 6232.
+Kindly confirm attendance by replying to this e-mail or at +381 61 252 6232.
 
 Event page: AiChatBot.rs/poslovno-pravoslavno
 Invitation (PDF): AiChatBot.rs/images/pozivnica-poslovno-pravoslavno.pdf
