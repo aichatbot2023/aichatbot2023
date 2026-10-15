@@ -111,3 +111,7 @@ Nije poslato (adresa nije potvrđena): Kina, SwissCham, Nordic Business Alliance
 **Organizacije (22):** HORES, YUTA, Čovekoljublje, Turistička organizacija Srbije, SKGO, RARIS, RRA Zlatibor, RRA Srem, SEDA, RDA Bačka, Centar za razvoj Jablaničkog i Pčinjskog okruga, NTP Beograd, NTP Čačak, Poslovni inkubator Novi Sad, BITF, Smart Kolektiv, Trag fondacija, ABAS (Business Angels), SeVeN, Serbian Entrepreneurs, Nova Iskra, Catalyst Balkans.
 
 Nije pronađeno/izostavljeno: Kina (nema mejla), regionalne komore (deo PKS, već pozvana), Kolo srpskih sestara, ESN, poslovni klubovi Kragujevac/Niš, APPS (politička veza).
+
+## Treći talas 15.10.2026. — firme (60 poziva)
+
+Pionir, Matijević, Medela, Vitamin Horgoš, Moravka Pro, Koto, Voda Vrnjci, Kabinet Brewery, Destilerija Zarić, vinarije Aleksandrović, Zvonko Bogdan, Kovačević, Temet, Podrum Palić, Maurer, Jović; Slaviamed, Abela Pharm, PharmaNova, Esensa, Veterinarski zavod Subotica; Agromarket, Termovent, GP Planum, Elektroizgradnja, Naissus, Jugoinspekt; Quantox, ING Software, Medianis, Win Win; Univerexport, Aman, Lasta, Jugoprevoz, Grafostil, Laguna, Vulkan, Dunav osiguranje, Beo-lab, Sveti Vid; advokati JPM, Gecić, BDK, Živković Samardžić, Prica & Partners, PR Legal; hoteli Šumadija, Slavija, TownHouse 27, Sole Mio, Tami Residence, Tri-O Kragujevac, Zlatibor, Tara, Patria; Banjalučka pivara, Vitinka, Hipotekarna banka, Avala Resort.
