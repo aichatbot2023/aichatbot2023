@@ -93,3 +93,13 @@ With respect and kind regards,
 Aleksandar Nikolić
 Orthodox Business Association "Holy Despot Stefan Štiljanović"
 office@aichatbot.rs · +381 61 252 6232
+
+---
+
+## Poslato 15.10.2026. (39 poziva)
+
+**Udruženja i klubovi (16):** PKS bis@pks.rs · NALED naled@naled.rs · FIC office@fic.org.rs · AHK info@ahk.rs · CCIS office@ccis.rs · CCI France Serbie office@ccfs.rs · Unija poslodavaca info@poslodavci.rs · Udruženje poslovnih žena office@poslovnezene.org.rs · UMPS uspesnamreza@umps.rs · UKDS office@ukds.rs · Hrvatski poslovni klub office@hpk.rs · Digitalna Srbija inicijativa@dsi.rs · Startit kontakt@startit.rs · RAS office@ras.gov.rs · Evropski pokret office@emins.org · Advantage Austria belgrad@advantageaustria.org
+
+**Ambasade (23, adrese iz Diplomatske liste MSP 29.9.2026):** Rusija (+trgovinsko pred.) · Belorusija · Crna Gora · S. Makedonija · BiH (na srpskom) — Grčka (+ekon.) · Kipar · Rumunija (+ekon.) · Bugarska · Gruzija · Jermenija · Egipat · Mađarska (+trgovina) · Slovačka · Kazahstan · Azerbejdžan · Izrael · SAD (protokol) · Italija · Katar · Turska (+ekon.) · Indija · Brazil (na engleskom)
+
+Nije poslato (adresa nije potvrđena): Kina, SwissCham, Nordic Business Alliance, Hellenic BA, CANSEE, British Business Centre, Rusko-srpski klub, Rotary, Lions, Slovenački poslovni klub, kanadska trgovinska sekcija.
