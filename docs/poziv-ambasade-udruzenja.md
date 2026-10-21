@@ -119,3 +119,14 @@ Pionir, Matijević, Medela, Vitamin Horgoš, Moravka Pro, Koto, Voda Vrnjci, Kab
 ## Četvrti talas 15.10.2026. — firme (58 poziva)
 
 Univerziteti/škole: Singidunum, Metropolitan, FEFA, ITS, Union, Alfa BK, FIMEK, MBS. Turizam: Oktopod, Argus, Odeon, Kompas. Office Shoes, Beohemija, Albus, Ravanica, Aleva, Victoria Group, AD Podunavlje, Mlekara Granice, Sirela, Promist. Nameštaj: TIS, Jelofina, Matis. Metal/industrija: SATO plus, Eling, Fortuna, Galeb, Tipoplastika, Toza Marković, Bekament, Termomont. Građevina/arhitektura: Neimar-V, Studio Autori. PR: Represent, Communis. IT/energija: Zesium, Uspon, MT-KOMEX, Elektrovat. Logistika: D Express, BEX, Interšped, Transportšped, SDL Group, Eurošped. Auto Čačak. Štamparije: Rotografika, Cicero, Kolibri. Zdravstvo: Ars Medica, Markov Dental. Ugostiteljstvo: Catering+, Kalemegdanska terasa, Smokvica, Salto. Zlatara Aurum.
+
+## Peti talas 21.10.2026. — poziv za 14. novembar (samo uz online rezervaciju)
+
+Sadržaj: preko 30 kompanija na osnivačkom ručku 17.10, zahvalnost ambasadama Rusije i Angole, popust i preporuke među članovima, rezervacija https://aichatbot.rs/poslovno-pravoslavno?placeno=1, članstvo https://aichatbot.rs/poslovno-pravoslavno/mreza?tab=clanstvo&placeno=1, Božićni online meetup 8.1.2027 https://aichatbot.rs/poslovno-pravoslavno/bozicni-meetup?placeno=1.
+
+- Lične zahvalnice: Ambasada Rusije (ćirilica), Ambasada Angole (EN).
+- Ambasade: 4 na srpskom (Belorusija, CG, S. Makedonija, BiH) + 73 adrese na engleskom, BCC.
+- Organizacije na engleskom: 8, BCC.
+- Firme i organizacije na srpskom: 255 adresa u 6 BCC grupa.
+- Isključeno: adrese koje su se vratile (Bekament, Metalac, HTEC, Delta, Mr President, Hotel Park NS, Đurđić, Kiš, Dulka, mintorg, commerce CZ, ambaleb@sbb, Mjanmar glavna) i Univerexport (tražili kontakt formu).
+- Ispravke po odgovorima: Communis → srdjan.naumovic@communis.rs; Tipoplastika + marko.stjepic@tipoplastika.rs.
