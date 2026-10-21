@@ -130,3 +130,10 @@ Sadržaj: preko 30 kompanija na osnivačkom ručku 17.10, zahvalnost ambasadama 
 - Firme i organizacije na srpskom: 255 adresa u 6 BCC grupa.
 - Isključeno: adrese koje su se vratile (Bekament, Metalac, HTEC, Delta, Mr President, Hotel Park NS, Đurđić, Kiš, Dulka, mintorg, commerce CZ, ambaleb@sbb, Mjanmar glavna) i Univerexport (tražili kontakt formu).
 - Ispravke po odgovorima: Communis → srdjan.naumovic@communis.rs; Tipoplastika + marko.stjepic@tipoplastika.rs.
+
+## Šesti talas 21.10.2026. — nove firme i organizacije (112 adresa)
+
+Poziv sa benefitima članstva (357 €/god), galerijom https://aichatbot.rs/poslovno-pravoslavno/osnivacki-skup i napomenom da je dolazak 14.11. moguć isključivo uz online rezervaciju do 7. novembra.
+- 81 firma (mlinovi, pekare, mlekare, građevina, arhitekte, nekretnine, klinike i poliklinike, medicinska oprema, farmacija, hoteli Kopaonik/Zlatibor/Vrnjačka Banja/Sokobanja/Divčibare, nameštaj, prevoz, IT Niš/Novi Sad...).
+- 27 organizacija (12 turističkih organizacija gradova, klasteri, udruženja preduzetnica, Klub uspešnih, Udruženje banja, DANS, pčelari, Srbi za Srbe, Budi human, Fondacija Divac, Dobročinstvo SPC, ASCC Australija, Lifeline Chicago).
+- Slanje: 3 BCC grupe na srpskom + 1 na engleskom.
