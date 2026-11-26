@@ -171,3 +171,13 @@ Mejl je pre slanja usklađen sa stvarnim proizvodom:
 
 - Adrese se još traže: MLPCARE (Soner Şahin) i Dünyagöz (Hilal Küllebi). Ako stignu, šalju se sutra.
 - Inbox u 09:38: nema odgovora, odjava ni vraćenih poruka.
+
+**26. 11. 2026, treći krug: novi šablon A iz outreach-v2.md** (2 mejla; ukupno danas 13)
+
+| Ustanova | Kontakt | {oblast} | Paket |
+|---|---|---|---|
+| BHT Clinic İstanbul Tema Hastanesi | Ömer Kurnaz, predsednik upravnog odbora | hair transplantation | Bolnica |
+| Kızılay Sağlık Grubu | Ramazan Serkan Özcan, generalni direktor (adresa na domenu matične org. kizilay.com.tr) | surgery in Türkiye | Bolnica |
+
+- Adrese se još traže: Lokman Hekim (Süleyman Alper İnceöz) i LÖSANTE (Hande Ç.). Šalju se sutra.
+- Bez adrese u Clay-u: MLPCARE, Dünyagöz.
