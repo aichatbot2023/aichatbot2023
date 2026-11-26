@@ -199,3 +199,18 @@ Mejl je pre slanja usklađen sa stvarnim proizvodom:
 **Bez adrese:** LÖSANTE. Türkiye Hastanesi (Beril Zengin) se još traži.
 
 **U inboxu** je i poruka sa office@aichatbot.rs („Hvala na upoznavanju!“). Šalje je sam korisnik sa svog drugog naloga, pa nije odgovor klinike.
+
+**26. 11. 2026, peti krug: zvanične adrese objavljene na sajtovima ustanova** (3 mejla; ukupno danas 23)
+
+| Ustanova | Adresa (izvor) | {oblast} |
+|---|---|---|
+| Amerikan Hastanesi | info@amerikanhastanesi.org (stranica /iletisim) | complex surgery and cancer treatment |
+| Medical Point Hospitals Group | info@mph.com.tr (početna strana sajta) | organ transplantation and oncology |
+| LÖSANTE | losante@losante.com.tr (početna strana sajta) | childhood leukaemia and haemato-oncology |
+
+Nisu poslati:
+- **Medical Park, Liv / MLPCARE i Kolan:** na sajtu nema čitljive adrese, samo telefon i WhatsApp.
+- **Dünyagöz i Erdem:** sajt blokira automatsko čitanje (403).
+- **Avicenna:** domen nije dostupan iz ove sesije.
+
+Ovima se može pisati kroz kontakt formu na sajtu ili preko LinkedIn-a.
