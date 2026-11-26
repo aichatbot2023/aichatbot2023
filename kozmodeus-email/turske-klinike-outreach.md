@@ -159,3 +159,15 @@ Mejl je pre slanja usklađen sa stvarnim proizvodom:
 - timske pretplate su uživo (Klinika do 5, Bolnica do 25 lekara),
 - bez tvrdnje o broju korisnika,
 - „world's largest medical databases“ odnosi se na PubMed i druge javne baze.
+
+**26. 11. 2026, drugi krug** (4 mejla; ukupno danas 11)
+
+| Ustanova | Kontakt | Paket u ponudi |
+|---|---|---|
+| Memorial Healthcare Group | Bora Uludüz, CEO | Bolnica |
+| Anadolu Medical Center | Timur Atsüren, CEO | Bolnica |
+| Medicana Sağlık Grubu | Murat Kaya, član izvršnog odbora | Bolnica |
+| Medipol | Ali Söğüt, menadžer za međunarodne pacijente | Bolnica |
+
+- Adrese se još traže: MLPCARE (Soner Şahin) i Dünyagöz (Hilal Küllebi). Ako stignu, šalju se sutra.
+- Inbox u 09:38: nema odgovora, odjava ni vraćenih poruka.
