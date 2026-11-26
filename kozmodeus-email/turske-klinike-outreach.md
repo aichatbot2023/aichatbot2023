@@ -134,3 +134,28 @@ Do 50 se lako dopuni ako proširimo pretragu (npr. Antalya, Bursa) ili dodamo po
 1. **Brojka korisnika**: ostaje bez nje (preporuka), ili mi pošalji proverljivu brojku.
 2. **Mejl adrese**: Clay može da pronađe direktore za međunarodne pacijente i poslovni razvoj u ovim bolnicama i proveri im adrese. Ta pretraga troši Clay kredite, pa čeka tvoje „da". Opšte adrese (info@…) imaju mnogo manju stopu odgovora.
 3. **Tempo slanja**: domen kozmodeus.com je nov, a DMARC je na „p=none". Preporuka je 10–15 mejlova dnevno sa office@kozmodeus.com, a ne 50 odjednom, da ne završimo u spamu.
+
+---
+
+## Dnevnik slanja
+
+**26. 11. 2026, poslato sa office@kozmodeus.com** (7 mejlova; adrese pronašao i proverio Clay)
+
+| Ustanova | Kontakt | Paket u ponudi |
+|---|---|---|
+| Hisar Intercontinental | Emir Kavak, General Manager | Bolnica (25 lekara, €1,490) |
+| Ankara Güven Hospital | Ela Ayhan, Group Sales & Marketing Director | Bolnica |
+| Biruni University Hospital | Serap Kilerci Ulusal, General Manager | Bolnica |
+| Dentakay | Barış Ağaçdan, Marketing Director | Klinika (5 lekara, €690) |
+| ClinicExpert | Talip Taştemel, General Manager | Klinika |
+| Esteworld | Yeliz Binici, Marketing Director | Klinika |
+| Lema Dental Clinic | Anıl Atalay, Dir. Marketing & BD | Klinika |
+
+- Preskočeno: Acıbadem, jer je Clay vratio adresu na drugom domenu (akinlab.com.tr).
+- Bez pronađene adrese: Medical Park, Amerikan Hastanesi, Kolan, Medical Point, Erdem, Avicenna.
+- Nastavak je zakazan za 27. 11. u 10:00: provera odgovora i novih 10–12 mejlova.
+
+Mejl je pre slanja usklađen sa stvarnim proizvodom:
+- timske pretplate su uživo (Klinika do 5, Bolnica do 25 lekara),
+- bez tvrdnje o broju korisnika,
+- „world's largest medical databases“ odnosi se na PubMed i druge javne baze.
