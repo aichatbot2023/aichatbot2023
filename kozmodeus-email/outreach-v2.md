@@ -79,7 +79,6 @@ Head of Partnerships · Kozmodeus Medik
 | Biruni University Hospital | Serap | skilerci@biruni.edu.tr | complex surgery and oncology | Hospital |
 | Memorial | Bora | bora.uluduz@memorial.com.tr | IVF, organ transplantation and cardiac surgery | Hospital |
 | Anadolu Medical Center | Timur | timur.atsuren@anadolusaglik.org | cancer treatment and bone marrow transplantation | Hospital |
-| Medicana | Murat | murat.kaya@medicana.com.tr | cardiac surgery and oncology | Hospital |
 | Medipol | Ali | ali.sogut@medipol.com.tr | oncology and cardiovascular surgery | Hospital |
 | Dentakay | Barış | baris@dentakay.com | dental implants | Clinic |
 | ClinicExpert | Talip | talip@clinicexpert.com | hair transplantation and plastic surgery | Clinic |
@@ -87,3 +86,5 @@ Head of Partnerships · Kozmodeus Medik
 | Lema Dental Clinic | Anıl | anilatalay@lemaclinic.com | dental implants | Clinic |
 
 Follow-up ne ide nikome ko je u međuvremenu odgovorio ili zatražio odjavu.
+
+> Medicana je izbačena iz nastavka, jer se mejl na murat.kaya@medicana.com.tr vratio (adresa ne postoji).

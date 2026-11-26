@@ -181,3 +181,21 @@ Mejl je pre slanja usklađen sa stvarnim proizvodom:
 
 - Adrese se još traže: Lokman Hekim (Süleyman Alper İnceöz) i LÖSANTE (Hande Ç.). Šalju se sutra.
 - Bez adrese u Clay-u: MLPCARE, Dünyagöz.
+
+**26. 11. 2026, četvrti krug: nove klinike za zdravstveni turizam iz šire pretrage, šablon A** (7 mejlova; ukupno danas 20)
+
+| Ustanova | Kontakt | {oblast} | Paket |
+|---|---|---|---|
+| Lokman Hekim Sağlık Grubu | Süleyman Alper İnceöz, CEO grupe | treatment in Türkiye | Bolnica |
+| Vera Clinic | Waleed Taleb, suosnivač | hair transplantation | Klinika |
+| Dr. Terziler Exclusive Clinic | Dr. Servet Terziler, osnivač | hair and dental treatment | Klinika |
+| DentSpa | Abdullah Bekiroğlu, suosnivač i COO | dental implants | Klinika |
+| Kristal Clinic | Raouf Albiesh, vlasnik i CEO | dental implants | Klinika |
+| Omer Istanbul Dental Clinic | Dr. Ömer Karaaslan, osnivač | dental implants | Klinika / Bolnica |
+| Esvita Clinic | Selman Esen, osnivač | treatment in Istanbul | Klinika |
+
+**Vraćen mejl:** Medicana (murat.kaya@medicana.com.tr, adresa ne postoji). Izbačena je iz nastavka. Probati drugu osobu.
+
+**Bez adrese:** LÖSANTE. Türkiye Hastanesi (Beril Zengin) se još traži.
+
+**U inboxu** je i poruka sa office@aichatbot.rs („Hvala na upoznavanju!“). Šalje je sam korisnik sa svog drugog naloga, pa nije odgovor klinike.
